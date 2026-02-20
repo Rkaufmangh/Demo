@@ -14,21 +14,34 @@ namespace StargateAPI.Business.Queries
     public class GetPeopleHandler : IRequestHandler<GetPeople, GetPeopleResult>
     {
         public readonly StargateContext _context;
-        public GetPeopleHandler(StargateContext context)
+        private readonly ILogger _logger;
+
+        public GetPeopleHandler(StargateContext context, ILogger logger)
         {
             _context = context;
+            _logger = logger;
         }
         public async Task<GetPeopleResult> Handle(GetPeople request, CancellationToken cancellationToken)
         {
             var result = new GetPeopleResult();
 
-            var query = $"SELECT a.Id as PersonId, a.Name, b.CurrentRank, b.CurrentDutyTitle, b.CareerStartDate, b.CareerEndDate FROM [Person] a LEFT JOIN [AstronautDetail] b on b.PersonId = a.Id";
+            try
+            {
+                var query = $"SELECT a.Id as PersonId, a.Name, b.CurrentRank, b.CurrentDutyTitle, b.CareerStartDate, b.CareerEndDate FROM [Person] a LEFT JOIN [AstronautDetail] b on b.PersonId = a.Id";
 
-            var people = await _context.Connection.QueryAsync<PersonAstronaut>(query);
+                var people = await _context.Connection.QueryAsync<PersonAstronaut>(query);
 
-            result.People = people.ToList();
+                result.People = people.ToList();
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to get people");
+                result.Success = false;
+                result.Message = "Failed to get people";
+                return result;
+            }
         }
     }
 

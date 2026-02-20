@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11415.280
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "StargateUI", "StargateUI\", "{55B87759-A1DA-0559-E51D-DFFF99F783F0}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_50295"
+		Debug.AspNetCompiler.PhysicalPath = "StargateUI\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50295\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_50295"
+		Release.AspNetCompiler.PhysicalPath = "StargateUI\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_50295\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "50295"
+		SlnRelativePath = "StargateUI\"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StargateAPI", "api\StargateAPI.csproj", "{A6F3EF00-2B4E-270C-D334-75B75A1544DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StargateTest", "StargateTest\StargateTest.csproj", "{CDD7EE3A-BA3E-42F8-A7AF-6ECB38252EF3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{55B87759-A1DA-0559-E51D-DFFF99F783F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55B87759-A1DA-0559-E51D-DFFF99F783F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55B87759-A1DA-0559-E51D-DFFF99F783F0}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{55B87759-A1DA-0559-E51D-DFFF99F783F0}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{A6F3EF00-2B4E-270C-D334-75B75A1544DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6F3EF00-2B4E-270C-D334-75B75A1544DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6F3EF00-2B4E-270C-D334-75B75A1544DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6F3EF00-2B4E-270C-D334-75B75A1544DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDD7EE3A-BA3E-42F8-A7AF-6ECB38252EF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD7EE3A-BA3E-42F8-A7AF-6ECB38252EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD7EE3A-BA3E-42F8-A7AF-6ECB38252EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD7EE3A-BA3E-42F8-A7AF-6ECB38252EF3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {35E7EB9B-206D-4FA9-994E-71183E227AD3}
+	EndGlobalSection
+EndGlobal

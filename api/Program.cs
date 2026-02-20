@@ -1,11 +1,22 @@
+using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
+
+using Serilog;
+using Serilog.Sinks;
 using StargateAPI.Business.Commands;
 using StargateAPI.Business.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.SQLite(
+        sqliteDbPath: builder.Configuration.GetConnectionString("StarbaseApiDatabase"),
+        tableName: "Logs",
+            storeTimestampInUtc:true
+    )
+    .CreateLogger();
+builder.Host.UseSerilog();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -19,6 +30,7 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly);
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,6 +40,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

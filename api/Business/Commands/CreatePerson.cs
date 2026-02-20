@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Dapper;
+using MediatR;
 using MediatR.Pipeline;
 using Microsoft.EntityFrameworkCore;
 using StargateAPI.Business.Data;
@@ -18,30 +19,43 @@ namespace StargateAPI.Business.Commands
         {
             _context = context;
         }
-        public Task Process(CreatePerson request, CancellationToken cancellationToken)
+        public async Task Process(CreatePerson request, CancellationToken cancellationToken)
         {
-            var person = _context.People.AsNoTracking().FirstOrDefault(z => z.Name == request.Name);
+            var person = await _context.People.AsNoTracking().FirstOrDefaultAsync(z => z.Name == request.Name);
 
             if (person is not null) throw new BadHttpRequestException("Bad Request");
-
-            return Task.CompletedTask;
         }
     }
 
     public class CreatePersonHandler : IRequestHandler<CreatePerson, CreatePersonResult>
     {
         private readonly StargateContext _context;
+        private readonly ILogger _logger;
 
-        public CreatePersonHandler(StargateContext context)
+        public CreatePersonHandler(StargateContext context, ILogger<CreatePersonHandler> logger)
         {
             _context = context;
+            _logger = logger;
         }
         public async Task<CreatePersonResult> Handle(CreatePerson request, CancellationToken cancellationToken)
         {
-
+            //check to make sure name is not in db
+            var existingPerson =
+                await _context.Connection.QueryFirstOrDefaultAsync<Person>("select * from person where name = @name",
+                    new {name = request.Name});
+            if (existingPerson != null)
+                return new CreatePersonResult
+                {
+                    Id = existingPerson.Id,
+                    Message = "This person alread exists.",
+                    ResponseCode = -1,
+                    Success = false
+                };
+            try
+            {
                 var newPerson = new Person()
                 {
-                   Name = request.Name
+                    Name = request.Name
                 };
 
                 await _context.People.AddAsync(newPerson);
@@ -52,7 +66,13 @@ namespace StargateAPI.Business.Commands
                 {
                     Id = newPerson.Id
                 };
-          
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create person");
+                return new CreatePersonResult {Success = false, Message = "Failed to create person"};
+            }
+
         }
     }
 
