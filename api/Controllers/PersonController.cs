@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StargateAPI.Business.Commands;
 using StargateAPI.Business.Queries;
 using System.Net;
+using StargateAPI.Business.Data;
 
 namespace StargateAPI.Controllers
 {
@@ -12,9 +13,11 @@ namespace StargateAPI.Controllers
     public class PersonController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public PersonController(IMediator mediator)
+        private readonly ILogger<PersonController> _logger;
+        public PersonController(IMediator mediator, ILogger<PersonController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         [HttpGet("")]
@@ -26,11 +29,12 @@ namespace StargateAPI.Controllers
                 {
 
                 });
-
+                if (!result.Success) throw new Exception("Failed to get people");
                 return this.GetResponse(result);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to get people.");
                 return this.GetResponse(new BaseResponse()
                 {
                     Message = ex.Message,
@@ -49,11 +53,14 @@ namespace StargateAPI.Controllers
                 {
                     Name = name
                 });
+                if (!result.Success) throw new Exception("Could not get person.");
+                //lets update the person
 
                 return this.GetResponse(result);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to update person.");
                 return this.GetResponse(new BaseResponse()
                 {
                     Message = ex.Message,
@@ -85,6 +92,25 @@ namespace StargateAPI.Controllers
                 });
             }
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePerson([FromBody] Person person)
+        {
+            try
+            {
+                var result = await _mediator.Send(new UpdatePerson {Person = person});
+                return this.GetResponse(result);
+            }
+            catch (Exception ex)
+            {
+                return this.GetResponse(new BaseResponse()
+                {
+                    Message = ex.Message,
+                    Success = false,
+                    ResponseCode = (int)HttpStatusCode.InternalServerError
+                });
+            }
         }
     }
 }
